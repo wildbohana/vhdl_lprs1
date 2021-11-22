@@ -16,12 +16,12 @@ architecture Behavioral of Brojac is
 	
 begin
 	
-	process (iRST, iCLK) begin						-- asinhroni
+	process (iRST, iCLK) begin				-- asinhroni
 		if(iRST = '1') then
 			sCNT <= "00000000";
 		elsif (iCLK'event and iCLK = '1') then		-- rastuća ivica
 			if(iEN = '1') then
-				if(sCNT = 82) then					-- po modulu 83
+				if(sCNT = 82) then		-- po modulu 83
 					sCNT <= "00000000";
 				else
 					sCNT <= sCNT + 1;
