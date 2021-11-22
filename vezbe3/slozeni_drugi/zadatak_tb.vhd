@@ -6,17 +6,17 @@ end entity;
 
 architecture Behavioral of slozeni_sistem_2_tb is
 	
-	signal sA : std_logic_vector(3 downto 0);
-	signal sB : std_logic_vector(3 downto 0);
-	signal sSEL : std_logic_vector(1 downto 0);
-	signal sC : std_logic_vector(3 downto 0);
+	signal sA 	: std_logic_vector(3 downto 0);
+	signal sB 	: std_logic_vector(3 downto 0);
+	signal sSEL 	: std_logic_vector(1 downto 0);
+	signal sC 	: std_logic_vector(3 downto 0);
 
 	component slozeni_sistem_2 is
 		port(
-			iA : in std_logic_vector(3 downto 0);
-			iB : in std_logic_vector(3 downto 0);
-			iSEL : in std_logic_vector(1 downto 0);
-			oC : out std_logic_vector(3 downto 0)
+			iA 	:  in std_logic_vector(3 downto 0);
+			iB 	:  in std_logic_vector(3 downto 0);
+			iSEL 	:  in std_logic_vector(1 downto 0);
+			oC 	: out std_logic_vector(3 downto 0)
 		);
 	end component;
 
