@@ -41,3 +41,4 @@ sS <= iB AND iA;
 oY <= NOT(sS);
 
 END bdf_type;
+
