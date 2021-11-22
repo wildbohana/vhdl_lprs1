@@ -8,20 +8,20 @@ end entity;
 architecture Test of Slozeni_tb is
 
 	--Inputs and outputs
-    signal sCLK   : std_logic := '0';
-    signal sRST   : std_logic := '0';
-    signal sEN    : std_logic := '0';
+    	signal sCLK   : std_logic := '0';
+    	signal sRST   : std_logic := '0';
+    	signal sEN    : std_logic := '0';
 	signal sCNT   : std_logic_vector(7 downto 0);
-    signal sSHREG : std_logic_vector(7 downto 0);
+    	signal sSHREG : std_logic_vector(7 downto 0);
 	
 	constant iCLK_period : time := 10 ns;
 	
 	component Slozeni is port(
-	iCLK   : in  std_logic;
-    iRST   : in  std_logic;
-    iEN    : in  std_logic;
-	oCNT   : out std_logic_vector (7 downto 0);
-    oSHREG : out std_logic_vector(7 downto 0)
+	iCLK   :  in std_logic;
+    	iRST   :  in std_logic;
+    	iEN    :  in std_logic;
+	oCNT   : out std_logic_vector(7 downto 0);
+    	oSHREG : out std_logic_vector(7 downto 0)
     );
    end component;
 
