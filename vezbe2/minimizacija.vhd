@@ -6,7 +6,7 @@ entity minimizacija is
 		iB0	:	in std_logic;
 		iB1	:	in std_logic;
 		iB2	:	in std_logic;
-		oY		:	out std_logic );
+		oY	:	out std_logic );
 end entity;
 
 architecture Behavioral of minimizacija is
