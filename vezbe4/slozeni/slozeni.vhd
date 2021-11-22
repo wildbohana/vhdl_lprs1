@@ -3,24 +3,24 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
 entity Slozeni is port (
-		iCLK   : in  std_logic;
-      iRST   : in  std_logic;
-      iEN    : in  std_logic;
-		oCNT   : out std_logic_vector (7 downto 0);
-      oSHREG : out  std_logic_vector (7 downto 0)
+	iCLK   : in  std_logic;
+      	iRST   : in  std_logic;
+      	iEN    : in  std_logic;
+	oCNT   : out std_logic_vector (7 downto 0);
+      	oSHREG : out  std_logic_vector (7 downto 0)
 		);
 end entity;
 
 architecture Behavioral of Slozeni is
 
-	signal sCNT : std_logic_vector(7 downto 0);
-	signal sSHREG : std_logic_vector(7 downto 0);
-	signal sLOAD : std_logic;
-	signal sARITH : std_logic;
+	signal sCNT 	: std_logic_vector(7 downto 0);
+	signal sSHREG 	: std_logic_vector(7 downto 0);
+	signal sLOAD 	: std_logic;
+	signal sARITH 	: std_logic;
 
 begin
 
-	process (iCLK, iRST) begin						-- asinhroni
+	process (iCLK, iRST) begin				-- asinhroni
 		if(iRST = '1') then
 			sCNT <= "00000000";
 		elsif (iCLK'event and iCLK = '1') then		-- rastuća ivica
@@ -37,7 +37,7 @@ begin
 			sSHREG <= "00000000";
 		elsif(rising_edge(iCLK)) then
 			if(sLOAD = '1') then
-				sSHREG <= sCNT;				-- učitaj vrednost iz brojača
+				sSHREG <= sCNT;			-- učitaj vrednost iz brojača
 			else
 				if(sARITH = '1') then		-- aritmetički udesno
 					sSHREG <= sSHREG(7) & sSHREG(7 downto 1);
