@@ -8,10 +8,10 @@ use altera.altera_primitives_components.all;
 
 entity coder is
 	port(
-		iX			  : in std_logic_vector(7 downto 0);
+		iX	   :  in std_logic_vector(7 downto 0);
 		oY_uslovna : out std_logic_vector(2 downto 0);
-		oY_if		  : out std_logic_vector(2 downto 0);
-		oY_case	  : out std_logic_vector(2 downto 0)
+		oY_if	   : out std_logic_vector(2 downto 0);
+		oY_case	   : out std_logic_vector(2 downto 0)
 	);
 end entity;
 
@@ -19,14 +19,14 @@ architecture Behavioral of coder is
 	
 begin
 	-- uslovna dodela
-	oY_uslovna <= "111" when iX(7) = '1' else
-					  "110" when iX(6) = '1' else
-					  "101" when iX(5) = '1' else
-					  "100" when iX(4) = '1' else
-					  "011" when iX(3) = '1' else
-					  "010" when iX(2) = '1' else
-					  "001" when iX(1) = '1' else
-					  "000";
+	oY_uslovna <= 	"111" when iX(7) = '1' else
+	 		"110" when iX(6) = '1' else
+			"101" when iX(5) = '1' else
+			"100" when iX(4) = '1' else
+			"011" when iX(3) = '1' else
+			"010" when iX(2) = '1' else
+			"001" when iX(1) = '1' else
+			"000";
 					  
 	-- if-else process
 	process (iX) begin
