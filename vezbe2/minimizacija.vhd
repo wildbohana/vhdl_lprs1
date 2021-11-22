@@ -21,3 +21,4 @@ begin
 	oY <= sS0 or sS1 or sS2;
 	
 end architecture;
+	
