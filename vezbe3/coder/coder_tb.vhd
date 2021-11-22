@@ -6,22 +6,21 @@ end entity;
 
 architecture Behavioral of coder_tb is
 	
-	signal sX 		    : std_logic_vector(7 downto 0);
+	signal sX 	   : std_logic_vector(7 downto 0);
 	signal sY_uslovna  : std_logic_vector(2 downto 0);
 	signal sY_if       : std_logic_vector(2 downto 0);
 	signal sY_case     : std_logic_vector(2 downto 0);
 
 	component coder is
 		port(
-			iX			  : in std_logic_vector(7 downto 0);
+			iX	   : in std_logic_vector(7 downto 0);
 			oY_uslovna : out std_logic_vector(2 downto 0);
-			oY_if		  : out std_logic_vector(2 downto 0);
-			oY_case	  : out std_logic_vector(2 downto 0)
+			oY_if	   : out std_logic_vector(2 downto 0);
+			oY_case	   : out std_logic_vector(2 downto 0)
 		);
 	end component;
 	
 begin
-
 	uut : coder port map(
 		iX => sX,
 		oY_uslovna => sY_uslovna,
