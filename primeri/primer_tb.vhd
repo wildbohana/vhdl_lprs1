@@ -11,36 +11,42 @@ architecture arch of zad_tb is
 
 	constant i_clk_period : time := 10 ns;
 
-	signal i_clk : std_logic;
-	signal i_rst : std_logic;
+	signal iCLK : std_logic;
+	signal iRST : std_logic;
 
 	-- i ovde dodaš i/o signale po potrebi
+	signal iA : std_logic;
+	signal iB : std_logic;
+	signal iSEL : std_logic_vector(1 downto 0);
+	signal oY : std_logic_vector(3 downto 0);
 
 begin
 
 	uut : entity work.zad
 	port map(
-		i_clk => i_clk,
-		i_rst => i_rst,
+		iCLK => iCLK,
+		iRST => iRST,
 
 		-- i tako za ostale gore napisane i/o signale
+		iA => iA,
+		iB => iB,
+		iSEL => iSEL,
+		oY => oY
+
 	);
 
 	clk_p: process
 	begin
-		i_clk <= '0';
+		iCLK <= '0';
 		wait for i_clk_period/2;
-		i_clk <= '1';
+		iCLK <= '1';
 		wait for i_clk_period/2;
 	end process;
 
 	stim_p: process
 	begin
-		-- ovde pišeš tb
 	
-
-
-
+		-- ovde pišeš tb
 
 	wait
 	end process;
