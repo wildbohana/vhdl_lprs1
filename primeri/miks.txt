@@ -1,0 +1,66 @@
+--- VEŽBE ---
+
+Svako kolo se realizuje pomoću elektronskih komponenti - tranzistora.
+Redosled navođenja logičkih kola nije bitan.
+Test bench je digitalni sistem bez prolaza. Interni signali se analiziraju od strane alata za simulaciju.
+
+Sve VHDL datoteke se sastoje iz tri dela: use (biblioteke), entity (I/O portovi sistema), architecture (unutrašnjost sistema - interni signali).
+
+Kombinacione mreže su složeni digitalni sistemi kod kojih logičko stanje izlaza zavisi samo od trenutnih vrednosti signala na ulazu.
+Izlaz k.m. je uvek jednak Bulovoj funkciji trenutnih vrednosti na ulazu (trenutno stanje).
+
+Kod sekvencijalnih mreža je obavezno korišćenje internih signala.
+Sekvencijalne mreže se mogu opisati isključivo pomoću sekvencijalnih procesa.
+U listi osetljivosti sekvencijalnih procesa mogu da se nađu samo signali takta i reseta.
+Svaka sekvencijalna komponenta u sistemu mora biti opisana kao interni signal.
+
+Drugi komplement je praktično jedini način predstavljanja negativnog broja u računarskom sistemu.
+
+
+--- PREDAVANJA ---
+Mehanički prekidač omogućuje tok struje u oba smera. Postoji bouncing (loše). Nije električno  upravljiv.
+Dioda - Vth = 0.6V, naponom kontrolisani prekidač.
+
+Bulova algebra (matematički) je matematički sistem definisan nad skupom S i dve operacije nad njegovim elementima.
+Bulova algebra (inžinjerski) je matematički sistem definisan nad skupom S i dve binarne i jednom unarnom operacijom (konj, disj, negacija).
+Bulova ili prekidačka funkcija od n-promenljivih predstavlja preslikavanje skupa Bn -> B. 
+Broj različitih prekidačkih funkcija je 2^2^n.
+Konstituenta jedinice - ima n slogva i samo jedan od njih je 1.
+Konstituenta nule - ima n slogova i samo jedan od njih je 0.
+
+Elementarne Bulove funkcije se fizički realizuju logičkim kolima.
+Sistem prekidačkih funkcija je funkcionalno potpun ako ako se pomoću funkcija koje ulaze u njega, primenom superpozicije, može dobiti bilo koja složena Bulova funkcija.
+Minterm - elementarni proizvod u koji ulaze sve promenljive.
+Maxterm - elementarni zbir u koji ulaze sve promenljive.
+
+MUX - 2^n ulaza, n upravljačkih
+case (iSEL) is
+when "000" => oY <= ix(0);
+
+DEMUX - n upravljačkih, 2^n izlaza
+case (iSEL) is
+when "000" => oY(0) <= iX;
+
+DECODER - n ulaza, 2^n izlaza
+case (iX) is
+when "01" => oD <= "0010";
+
+CODER - 2^n ulaza, n izlaza
+case (iX) is
+when "1000" => oD <= "11";
+
+Zadatak minimizacije Bulovih funkcija se svodi na određivanje Bulove funkcije sa minimalnim brojem superpozicija unutar jednog funkcionalno potpunog sistema. 
+Inženjerski gledano, cilj je svesti količinu upotrebljenih logičkih kola na minimum, a da izlazna funkcija bude očuvana.
+
+Grejov kod nije težinski kod.
+Pogodan je za prenos brojačkih informacija između 2 sistema.
+
+Hemingovo rastojanje - između 2 kodne reči.
+Hemingov kod:
+	- predaja (C1C2C3C4 + C5C6C7), 
+	- prijem (R1R2R3R4R5R6R7) -> sindromi S1, S2, S3
+	- vektor greške W1, W2, W3, W4, W5, W6, W7
+
+Aritmetičke k.m.: pomerači, komparatori, sabirači, komplementeri...
+A.k.m. sa više operacija - ALU.
+Pun sabirač - k.m. sa 3 ulaza i 2 izlaza (C - prenos od ranije, C0 - novi prenos).
