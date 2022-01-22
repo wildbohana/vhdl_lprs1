@@ -1,3 +1,5 @@
+-- Zadatak --
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -14,7 +16,7 @@ architecture arch of zad_tb is
 	signal iCLK : std_logic;
 	signal iRST : std_logic;
 
-	-- i ovde dodaš i/o signale po potrebi
+	-- I ovde dodaš I/O signale po potrebi
 	signal iA : std_logic;
 	signal iB : std_logic;
 	signal iSEL : std_logic_vector(1 downto 0);
@@ -27,7 +29,7 @@ begin
 		iCLK => iCLK,
 		iRST => iRST,
 
-		-- i tako za ostale gore napisane i/o signale
+		-- I tako za ostale gore napisane I/O signale
 		iA => iA,
 		iB => iB,
 		iSEL => iSEL,
@@ -46,7 +48,7 @@ begin
 	stim_p: process
 	begin
 	
-		-- ovde pišeš tb
+		-- Ovde pišeš tb
 
 	wait
 	end process;
