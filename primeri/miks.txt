@@ -1,3 +1,5 @@
+~  Teorija  ~
+
 --- VEŽBE ---
 
 Svako kolo se realizuje pomoću elektronskih komponenti - tranzistora.
