@@ -1,4 +1,6 @@
--- biblioteke
+--  Zadatak  --
+
+-- Biblioteke
 library ieee;
 use ieee.std_logic_1164.all
 use ieee.std_logic_unsigned.all;
@@ -14,10 +16,10 @@ entity primer is
 end primer;
 
 architecture behavioral of primer is
-	-- konstante
+	-- Konstante
 	constant mod10 : std_logic_vector(3 downto 0) := "0101";	-- 9 (valjda)
 
-	-- signali
+	-- Signali
 	signal sMUX : std_logic_vector(3 downto 0);
 	signal sDEC : std_logic_vector(3 downto 0);
 	signal sCNT : std_logic_vector(3 downto 0);
@@ -27,23 +29,23 @@ begin
 
 	-------------- KLASIKA --------------
 
-	-- sabirač
+	-- Sabirač
 	sADD <= sB + sC;
 
-	-- komplementer
+	-- Komplementer
 	sCOMP <= not(sADD) + 1;
 
-	-- aritmetičko udesno za 2
+	-- aAritmetičko udesno za 2
 	sSHIFT <= sADD(3) & sADD(3) & sADD(3 downto 2);
 
-	-- uslovna dodela vrednosti
+	-- Uslovna dodela vrednosti
 	oZERO <= '1' when sMUX = 0 else '0';
 
 
 
 	-------------- KOMBINACIONI ELEMENTI --------------
 
-	-- prioritetni koder najvišeg prioriteta
+	-- Prioritetni koder najvišeg prioriteta
 	oY <=
 		"111" when iX(7) = '1' else
 		"110" when iX(6) = '1' else
@@ -54,7 +56,7 @@ begin
 		"001" when iX(1) = '1' else
 		"000";
 	
-	-- pripritetni koder najnižeg prioriteta
+	-- Prioritetni koder najnižeg prioriteta
 	oY <=
 		"000" when iX(0) = '1' else
 		"001" when iX(1) = '1' else
@@ -65,7 +67,7 @@ begin
 		"110" when iX(6) = '1' else
 		"111";
 
-	-- dekoder
+	-- Dekoder
 	sDEC <=
 		"00000001" when iD = "000" else
 		"00000010" when iD = "001" else
@@ -76,7 +78,7 @@ begin
 		"01000000" when iD = "110" else
 		"10000000";
 	
-	-- multiplekser 2x4
+	-- Multiplekser 2x4
 	sMUX <=
 		sCNT when iSEL = "00" else
 		sDEC when iSEL = "01" else
@@ -114,7 +116,7 @@ begin
 
 	-------------- SEKVENCIJALNI ELEMENTI --------------
 
-	-- brojač, asinhroni reset, rastuća ivica
+	-- Brojač, asinhroni reset, rastuća ivica
 	process (iRST, iCLK) begin
 		if(iRST = '1') then
 			sCA <= "0000";
@@ -125,7 +127,7 @@ begin
 		end if;
 	end process;
 
-	-- brojač. sinhroni, opadajuća ivica
+	-- Brojač, sinhroni reset, opadajuća ivica
 	process (iCLK) begin
 		if(falling_edge(iCLK)) then
 			if (iRST = '1') then
@@ -136,7 +138,7 @@ begin
 		end if;
 	end process;
 
-	-- pomerački registar
+	-- Pomerački registar
 	process (iRST, iCLK) begin
 		if (iRST = '1') then
 			sSHREG = "0000";
