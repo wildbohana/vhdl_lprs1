@@ -89,8 +89,8 @@ begin
 	end process;
 	
 	-- Funkcija izlaza
-	oRED	<= '1' when sSTATE = RED or sSTATE = RED_YELLOW else '0';
-	oYELLOW	<= '1' when sSTATE = YELLOW or sSTATE = RED_YELLOW else '0';
-	oGREEN 	<= '1' when sSTATE = GREEN	or sSTATE = HAZARD else '0';
+	oRED	<= '1' when sSTATE = RED	or sSTATE = RED_YELLOW	else '0';
+	oYELLOW	<= '1' when sSTATE = YELLOW	or sSTATE = RED_YELLOW	else '0';
+	oGREEN 	<= '1' when sSTATE = GREEN	or sSTATE = HAZARD	else '0';
 
 end architecture;
