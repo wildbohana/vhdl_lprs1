@@ -3,192 +3,94 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
 entity automat is
-	port(
-		i_clk            :  in std_logic;
-		i_rst            :  in std_logic;
-		i_base           :  in std_logic_vector(1 downto 0);
-		i_sequence       :  in std_logic_vector(63 downto 0);
-		i_load_sequence  :  in std_logic;
-		i_base_src_sel   :  in std_logic;
-		i_cnt_subseq_sel :  in std_logic_vector(1 downto 0);
-		o_cnt_subseq     : out std_logic_vector(3 downto 0)
+	port (
+		iCLK    :  in std_logic;
+		iRST    :  in std_logic;
+		iOK     :  in std_logic;
+		iHAZ    :  in std_logic;
+		oRED    : out std_logic;
+		oYELLOW : out std_logic;
+		oGREEN  : out std_logic
 	);
 end entity;
 
 architecture arch of automat is
 	-- Constants.
-	constant A : std_logic_vector(1 downto 0) := "00";
-	constant C : std_logic_vector(1 downto 0) := "01";
-	constant G : std_logic_vector(1 downto 0) := "10";
-	constant T : std_logic_vector(1 downto 0) := "11";
-	
+
 	-- Signals.
-	type t_state is (idle, gxx, ggx, gax, ggt, ggc, gag);
-	signal s_state, s_next_state : t_state;
-
-	-- Dozvole brojanja
-	signal s_en_subseq0 : std_logic;		-- seq0: GGT
-	signal s_en_subseq1 : std_logic;		-- seq1: GGC
-
-	-- Brojači
-	signal s_cnt_subseq0 : std_logic_vector(3 downto 0) := "0000";	-- mod5  (0100)
-	signal s_cnt_subseq1 : std_logic_vector(3 downto 0) := "0000";	-- mod8  (0111)
-	signal s_cnt_subseq2 : std_logic_vector(3 downto 0) := "0000";	-- mod10 (1001)
-
-	-- Registri
-	signal s_base : std_logic_vector(1 downto 0);			-- baza koju unosimo
-	signal s_sh_base : std_logic_vector(1 downto 0);		-- preuzeta baza
-	signal s_sh_sequence : std_logic_vector(63 downto 0);	-- sekvenca ?
-	signal s_sh_reg : std_logic_vector(63 downto 0);		-- pomerački registar
+	type tSTATE is (IDLE, RED, RED_YELLOW, GREEN, YELLOW, HAZARD);
+	signal sSTATE, sNEXT_STATE : tSTATE;
 	
+	signal sCNT	: std_logic_vector(2 downto 0);
+	signal sTC	: std_logic;
+
 --------------------------------------------------------------------------------
 
 begin
 
-	-- Registar za pamćenje stanja
-	-- Sinhroni reset
-	process(i_clk) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
-				s_state <= idle;
-			else
-				s_state <= s_next_state;
-			end if;
+	-- Registar za pamćenje stanja automata
+	process (iCLK, iRST) begin
+		if (iRST = '1') then
+			sSTATE <= IDLE;
+		elsif (rising_edge(iCLK)) then
+			sSTATE <= sNEXT_STATE;
 		end if;
 	end process;
 
 	-- Funkcija prelaza stanja
-	process(s_state, s_base) begin						
-		case(s_state) is
-
-			when idle =>
-				if(s_base = G) then
-					s_next_state <= gxx;
+	process (sSTATE, iHAZ, iOK) begin
+		case sSTATE is
+			when IDLE =>
+				if (iOK = '1') then
+					sNEXT_STATE <= RED;
 				else
-					s_next_state <= idle;
-				end if;
-			
-			when gxx =>
-				if(s_base = g) then
-					s_next_state <= ggx;
-				else
-					s_next_state <= idle;
+					sNEXT_STATE <= IDLE;
 				end if;
 
-			when ggx =>
-				if(s_base = t) then
-					s_next_state <= ggt;
-				elsif(s_base = c) then
-					s_next_state <= ggc;
+			when RED =>
+				if (iHAZ = '1') then
+					sNEXT_STATE <= HAZARD;
 				else
-					s_next_state <= idle;
+					sNEXT_STATE <= RED_YELLOW;
 				end if;
 
-			when ggt =>
-				if(s_base = G) then
-					s_next_state <= gxx;
+			when RED_YELLOW =>
+				if (iHAZ = '1') then
+					sNEXT_STATE <= HAZARD;
 				else
-					s_next_state <= idle;
+					sNEXT_STATE <= GREEN;
 				end if;
 
-			when ggc =>
-				if(s_base = G) then
-					s_next_state <= gxx;
+			when GREEN =>
+				if (iHAZ = '1') then
+					sNEXT_STATE <= HAZARD;
 				else
-					s_next_state <= idle;
+					sNEXT_STATE <= YELLOW;
+				end if;
+
+			when YELLOW =>
+				if (iHAZ = '1') then
+					sNEXT_STATE <= HAZARD;
+				else
+					sNEXT_STATE <= RED;
+				end if;
+
+			when HAZARD =>
+				if (iOK = '1') then
+					sNEXT_STATE <= RED;
+				else
+					sNEXT_STATE <= HAZARD;
 				end if;
 
 			when others =>
-				s_next_state <= idle;
-
+				sNEXT_STATE <= IDLE;
+				
 		end case;
 	end process;
-
-	-- Dozvole brojanja za brojače
-	s_en_subseq0 <= '1' when s_state = ggt else '0';
-	s_en_subseq1 <= '1' when s_state = ggc else '0';
-
-	-- Brojač GGT podsekvence (mod5)
-	-- Sinhroni reset
-	process(i_clk) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
-				s_cnt_subseq0 <= "0000";
-			else
-				if(s_en_subseq0 = '1') then
-					if(s_cnt_subseq0 >= 4) then
-						s_cnt_subseq0 <= "0000";
-					elsif(s_cnt_subseq0 < 4) then
-						s_cnt_subseq0 <= s_cnt_subseq0 + 1;
-					end if;
-				end if;
-			end if;
-		end if;
-	end process;
-
-	-- Brojač GGC podsekvence (mod8)
-	-- Asinhroni reset
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
-			s_cnt_subseq1 <= "0000";
-		elsif(falling_edge(i_clk)) then
-			if(s_en_subseq1 = '1') then
-				if(s_cnt_subseq1 >= 7) then
-					s_cnt_subseq1 <= "0000";
-				elsif(s_cnt_subseq1 < 7) then
-					s_cnt_subseq1 <= s_cnt_subseq1 + 1;
-				end if;
-			end if;
-		end if;
-	end process;
-
-	-- Izlazni MUX za selekciju izlaza brojača
-	-- Preko process-case
-	process(i_cnt_subseq_sel, s_cnt_subseq0, s_cnt_subseq1, s_cnt_subseq2) begin
-		case(i_cnt_subseq_sel) is
-			when "00" => o_cnt_subseq <= s_cnt_subseq0;
-			when "01" => o_cnt_subseq <= s_cnt_subseq1;
-			when "10" => o_cnt_subseq <= "1111";
-			when others => o_cnt_subseq <= "0000";
-		end case;
-	end process;
-
-	-- Ulazni MUX za selekciju baze koja će ući u brojač
-	-- Preko process-case
-	process(i_base_src_sel, i_base, s_sh_base) begin
-		case(i_base_src_sel) is
-			when '0' => s_base <= i_base;
-			when '1' => s_base <= s_sh_base;				-- vrednost iz pom. reg.
-			when others => s_base <= "00";
-		end case;
-	end process;
-
-	-- Pomerački registar koji šalje jednu po jednu bazu iz sekvence u automat
-	-- Sinhroni reset
-	process(i_load_sequence, i_clk) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
-				s_sh_base <= "00";
-			else
-				s_sh_base <= s_sh_reg(63 downto 62);
-			end if;
-		end if;
-	end process;
-
-	-- Dodela vrednosti pomeračkom registru
-	-- Sinhroni reset
-	process(i_clk, i_rst) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
-				s_sh_reg <= "0000000000000000000000000000000000000000000000000000000000000000";
-			else
-				s_sh_reg <= s_sh_sequence;
-			end if;
-		end if;
-	end process;
-
-	-- Kombinaciona mreža pomeračkog registra preko when-else
-	s_sh_sequence <=	i_sequence 	when i_load_sequence = '1' else
-			 			s_sh_reg(61 downto 0) & "00";
+	
+	-- Funkcija izlaza
+	oRED	<= '1' when sSTATE = RED or sSTATE = RED_YELLOW else '0';
+	oYELLOW	<= '1' when sSTATE = YELLOW or sSTATE = RED_YELLOW else '0';
+	oGREEN 	<= '1' when sSTATE = GREEN	or sSTATE = HAZARD else '0';
 
 end architecture;
