@@ -20,9 +20,6 @@ architecture arch of automat is
 	-- Signals.
 	type tSTATE is (IDLE, RED, RED_YELLOW, GREEN, YELLOW, HAZARD);
 	signal sSTATE, sNEXT_STATE : tSTATE;
-	
-	signal sCNT	: std_logic_vector(2 downto 0);
-	signal sTC	: std_logic;
 
 --------------------------------------------------------------------------------
 
@@ -89,8 +86,8 @@ begin
 	end process;
 	
 	-- Funkcija izlaza
-	oRED	<= '1' when sSTATE = RED	or sSTATE = RED_YELLOW	else '0';
-	oYELLOW	<= '1' when sSTATE = YELLOW	or sSTATE = RED_YELLOW	else '0';
+	oRED	<= '1' when sSTATE = RED	or sSTATE = RED_YELLOW	or sSTATE = HAZARD	else '0';
+	oYELLOW	<= '1' when sSTATE = YELLOW	or sSTATE = RED_YELLOW	or sSTATE = HAZARD	else '0';
 	oGREEN 	<= '1' when sSTATE = GREEN	or sSTATE = HAZARD	else '0';
 
 end architecture;
