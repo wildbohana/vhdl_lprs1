@@ -1,0 +1,36 @@
+architecture Behavioral of instr_rom is
+begin
+    oQ <= "100000111000000"  when iA = 0 else
+          "000110000000000"  when iA = 1 else
+          "000001000000111"  when iA = 2 else
+          "000000001000000"  when iA = 3 else
+          "000111000000000"  when iA = 4 else
+          "000001010001111"  when iA = 5 else
+          "000000011010000"  when iA = 6 else
+          "000010100010001"  when iA = 7 else
+          "010001000010001"  when iA = 8 else
+          "100000101000001"  when iA = 9 else
+          "100000110000011"  when iA = 10 else
+          "000100111101110"  when iA = 11 else
+          "110000000111000"  when iA = 12 else
+          "000110011011000"  when iA = 13 else
+          "000110001001000"  when iA = 14 else
+          "000111000000000"  when iA = 15 else
+          "010000000000111"  when iA = 16 else
+          "000010000000000"  when iA = 17 else
+          "100000111000000"  when iA = 18 else
+          "000000010000000"  when iA = 19 else
+          "000001001010111"  when iA = 20 else
+          "000010011011011"  when iA = 21 else
+          "000010111001010"  when iA = 22 else
+          "010001000011111"  when iA = 23 else
+          "100000100000001"  when iA = 24 else
+          "000010101001011"  when iA = 25 else
+          "010010000011100"  when iA = 26 else
+          "010000000011101"  when iA = 27 else
+          "000000011100000"  when iA = 28 else
+          "000111001001000"  when iA = 29 else
+          "010000000010110"  when iA = 30 else
+          "010000000011111"  when iA = 31 else
+          "000000000000000";
+end Behavioral;
