@@ -40,17 +40,17 @@ begin
 	-- Body.
 
 	-- Kontrola dozvole brojanja, signal s_en_us:
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_en_1us <= '0';
-		elsif(i_clk'event and i_clk = '1') then
-			if(i_rst = '1') then
+		elsif (i_clk'event and i_clk = '1') then
+			if (i_rst = '1') then
 				s_en_1us <= '0';
-			elsif(i_run = '1') then
+			elsif (i_run = '1') then
 				s_en_1us <= '1';
-			elsif(i_pause = '1') then
+			elsif (i_pause = '1') then
 				s_en_1us <= '0';
-			elsif(i_pause = '1' and i_run = '1') then
+			elsif (i_pause = '1' and i_run = '1') then
 				s_en_1us <= '1';
 			end if;
 		end if;
@@ -58,14 +58,14 @@ begin
 	end process;
 
 	-- Brojač jedne 1 us, signal s_cnt_1us:
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_cnt_1us <= "00000";
-		elsif(rising_edge(i_clk)) then
-			if(s_en_1us = '1') then							-- signal iz kontrole dozvole brojanja
-				if(s_cnt_1us < cMod25) then
+		elsif (rising_edge(i_clk)) then
+			if (s_en_1us = '1') then			-- signal iz kontrole dozvole brojanja
+				if (s_cnt_1us < cMod25) then
 					s_cnt_1us <= s_cnt_1us + 1;
-				elsif(s_cnt_1us >= cMod25) then
+				elsif (s_cnt_1us >= cMod25) then
 					s_cnt_1us <= "00000";
 				end if;
 			end if;
@@ -74,21 +74,20 @@ begin
 	end process;
 
 	-- Kombinaciona provera za aktivaciju signala s_tc_1us (kraj brojača):
-	s_tc_1us <= '1' when s_cnt_1us = "00000" else
-					'0';
+	s_tc_1us <= '1' when s_cnt_1us = "00000" else '0';
 
 	-- and kapija za signale s_en_1us i s_tc_1us -> dozvola brojanja s_en0:
 	s_en0 <= s_en_1us and s_tc_1us;
 
 	-- Brojač jedne nulte cifre, signal s_cnt0:
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_cnt0 <= "0000";
-		elsif(i_clk'event and i_clk = '1') then
-			if(s_en0 = '1') then								-- dozvola brojanja
-				if(s_cnt0 < cMod10) then
+		elsif (i_clk'event and i_clk = '1') then
+			if (s_en0 = '1') then				-- dozvola brojanja
+				if (s_cnt0 < cMod10) then
 					s_cnt0 <= s_cnt0 + 1;
-				elsif(s_cnt0 >= cMod10) then
+				elsif (s_cnt0 >= cMod10) then
 					s_cnt0 <= "0000";
 				end if;
 			end if;
@@ -97,8 +96,7 @@ begin
 	end process;
 
 	-- Kombinaciono provera za aktivaciju signala s_tc0 (kraj brojača):
-	s_tc0 <=	'1' when s_cnt0 = "1001" else
-				'0';
+	s_tc0 <= '1' when s_cnt0 = "1001" else '0';
 
 	-- and kapija za signale s_en0 i s_tc0 -> dozvola brojanja s_en1:
 	s_en1 <= s_en0 and s_tc0;
@@ -107,14 +105,14 @@ begin
 	o_digit0 <= s_cnt0;
 
 	-- Brojač jedne prve cifre, signal s_cnt1:
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_cnt1 <= "0000";
-		elsif(rising_edge(i_clk)) then
-			if(s_en1 = '1') then								-- dozvola brojanja
-				if(s_cnt1 < cMod6) then
+		elsif (rising_edge(i_clk)) then
+			if (s_en1 = '1') then				-- dozvola brojanja
+				if (s_cnt1 < cMod6) then
 					s_cnt1 <= s_cnt1 + 1;
-				elsif(s_cnt1 >= cMod6) then
+				elsif (s_cnt1 >= cMod6) then
 					s_cnt1 <= "0000";
 				end if;
 			end if;
@@ -123,8 +121,7 @@ begin
 	end process;
 
 	-- Kombinaciona provera za aktivaciju signala s_tc1 (kraj brojača):
-	s_tc1 <= '1' when s_cnt1 = "0101" else
-				'0';
+	s_tc1 <= '1' when s_cnt1 = "0101" else '0';
 	
 	-- Vezivanje internog i izlaznog signala brojača:
 	o_digit1 <= s_cnt1;
