@@ -46,7 +46,7 @@ architecture arch of lprs1_homework3 is
 	-- Registri
 	signal s_base : std_logic_vector(1 downto 0);			-- baza koju unosimo
 	signal s_sh_base : std_logic_vector(1 downto 0);		-- baza preuzeta iz sekvence
-	signal s_sh_sequence : std_logic_vector(63 downto 0);	-- sekvenca ?
+	signal s_sh_sequence : std_logic_vector(63 downto 0);		-- sekvenca ?
 	signal s_sh_reg : std_logic_vector(63 downto 0);		-- pomerački registar
 	
 begin
@@ -55,9 +55,9 @@ begin
 	-- 1 --
 	-- Registar za pamćenje stanja
 	-- Sinhroni reset
-	process(i_clk) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
+	process (i_clk) begin
+		if (falling_edge(i_clk)) then
+			if (i_rst = '1') then
 				s_state <= idle;
 			else
 				s_state <= s_next_state;
@@ -66,57 +66,57 @@ begin
 	end process;
 
 	-- Funkcija prelaza stanja
-	process(s_state, s_base) begin						
-		case(s_state) is
+	process (s_state, s_base) begin						
+		case (s_state) is
 
 			when idle =>
-				if(s_base = G) then
+				if (s_base = G) then
 					s_next_state <= gxx;
 				else
 					s_next_state <= idle;
 				end if;
 			
 			when gxx =>
-				if(s_base = g) then
+				if (s_base = g) then
 					s_next_state <= ggx;
-				elsif(s_base = a) then
+				elsif (s_base = a) then
 					s_next_state <= gax;
 				else
 					s_next_state <= idle;
 				end if;
 
 			when ggx =>
-				if(s_base = t) then
+				if (s_base = t) then
 					s_next_state <= ggt;
-				elsif(s_base = c) then
+				elsif (s_base = c) then
 					s_next_state <= ggc;
 				else
 					s_next_state <= idle;
 				end if;
 
 			when gax =>
-				if(s_base = g) then
+				if (s_base = g) then
 					s_next_state <= gag;
 				else
 					s_next_state <= idle;
 				end if;
 
 			when ggt =>
-				if(s_base = G) then
+				if (s_base = G) then
 					s_next_state <= gxx;
 				else
 					s_next_state <= idle;
 				end if;
 
 			when ggc =>
-				if(s_base = G) then
+				if (s_base = G) then
 					s_next_state <= gxx;
 				else
 					s_next_state <= idle;
 				end if;
 
 			when gag =>
-				if(s_base = G) then
+				if (s_base = G) then
 					s_next_state <= gxx;
 				else
 					s_next_state <= idle;
@@ -136,15 +136,15 @@ begin
 	-- 2 --
 	-- Brojač GGT podsekvence (mod5)
 	-- Sinhroni reset
-	process(i_clk) begin
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
+	process (i_clk) begin
+		if (falling_edge(i_clk)) then
+			if (i_rst = '1') then
 				s_cnt_subseq0 <= "0000";
 			else
-				if(s_en_subseq0 = '1') then
-					if(s_cnt_subseq0 >= 4) then
+				if (s_en_subseq0 = '1') then
+					if (s_cnt_subseq0 >= 4) then
 						s_cnt_subseq0 <= "0000";
-					elsif(s_cnt_subseq0 < 4) then
+					elsif (s_cnt_subseq0 < 4) then
 						s_cnt_subseq0 <= s_cnt_subseq0 + 1;
 					end if;
 				end if;
@@ -155,14 +155,14 @@ begin
 	-- 3 --
 	-- Brojač GGC podsekvence (mod8)
 	-- Asinhroni reset
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_cnt_subseq1 <= "0000";
-		elsif(falling_edge(i_clk)) then
-			if(s_en_subseq1 = '1') then
-				if(s_cnt_subseq1 >= 7) then
+		elsif (falling_edge(i_clk)) then
+			if (s_en_subseq1 = '1') then
+				if (s_cnt_subseq1 >= 7) then
 					s_cnt_subseq1 <= "0000";
-				elsif(s_cnt_subseq1 < 7) then
+				elsif (s_cnt_subseq1 < 7) then
 					s_cnt_subseq1 <= s_cnt_subseq1 + 1;
 				end if;
 			end if;
@@ -172,14 +172,14 @@ begin
 	-- 4 --
 	-- Brojač GAG podsekvence (mod10)
 	-- Asinhroni reset
-	process(i_clk, i_rst) begin
-		if(i_rst = '1') then
+	process (i_clk, i_rst) begin
+		if (i_rst = '1') then
 			s_cnt_subseq2 <= "0000";
-		elsif(falling_edge(i_clk)) then
-			if(s_en_subseq2 = '1') then
-				if(s_cnt_subseq2 >= 9) then
+		elsif (falling_edge(i_clk)) then
+			if (s_en_subseq2 = '1') then
+				if (s_cnt_subseq2 >= 9) then
 					s_cnt_subseq2 <= "0000";
-				elsif(s_cnt_subseq2 < 9) then
+				elsif (s_cnt_subseq2 < 9) then
 					s_cnt_subseq2 <= s_cnt_subseq2 + 1;
 				end if;
 			end if;
@@ -189,8 +189,8 @@ begin
 	-- 5 --
 	-- Izlazni MUX za selekciju izlaza brojača
 	-- Preko process-case
-	process(i_cnt_subseq_sel, s_cnt_subseq0, s_cnt_subseq1, s_cnt_subseq2) begin
-		case(i_cnt_subseq_sel) is
+	process (i_cnt_subseq_sel, s_cnt_subseq0, s_cnt_subseq1, s_cnt_subseq2) begin
+		case (i_cnt_subseq_sel) is
 			when "00" => o_cnt_subseq <= s_cnt_subseq0;
 			when "01" => o_cnt_subseq <= s_cnt_subseq1;
 			when "10" => o_cnt_subseq <= s_cnt_subseq2;
@@ -201,10 +201,10 @@ begin
 	-- 6 --
 	-- Ulazni MUX za selekciju baze koja će ući u brojač
 	-- Preko process-case
-	process(i_base_src_sel, i_base, s_sh_base) begin
-		case(i_base_src_sel) is
+	process (i_base_src_sel, i_base, s_sh_base) begin
+		case (i_base_src_sel) is
 			when '0' => s_base <= i_base;
-			when '1' => s_base <= s_sh_base;				-- vrednost iz pom. reg.
+			when '1' => s_base <= s_sh_base;		-- vrednost iz pom. reg.
 			when others => s_base <= "00";
 		end case;
 	end process;
@@ -212,21 +212,21 @@ begin
 	-- 7 --
 	-- Pomerački registar koji šalje jednu po jednu bazu iz sekvence u automat
 	-- Sinhroni reset
-	process(i_clk) begin			--> greška 1.1
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
+	process (i_clk) begin			--> greška 1.1
+		if (falling_edge(i_clk)) then
+			if (i_rst = '1') then
 				s_sh_base <= "00";
 			else
-				s_sh_base <= s_sh_reg(63 downto 62);		-- uzimamo 2 najviša bita iz registra
+				s_sh_base <= s_sh_reg(63 downto 62);	-- uzimamo 2 najviša bita iz registra
 			end if;
 		end if;
 	end process;
 
 	-- Dodela vrednosti pomeračkom registru
 	-- Sinhroni reset
-	process(i_clk) begin			--> greška 1.2
-		if(falling_edge(i_clk)) then
-			if(i_rst = '1') then
+	process (i_clk) begin			--> greška 1.2
+		if (falling_edge(i_clk)) then
+			if i_rst = '1') then
 				s_sh_reg <= "0000000000000000000000000000000000000000000000000000000000000000";
 			else
 				s_sh_reg <= s_sh_sequence;
@@ -235,7 +235,8 @@ begin
 	end process;
 
 	-- Kombinaciona mreža pomeračkog registra preko when-else
-	s_sh_sequence  <=	i_sequence 	when i_load_sequence = '1' else
-			 			s_sh_reg(61 downto 0) & "00";
+	s_sh_sequence <=
+		i_sequence when i_load_sequence = '1' else
+		 s_sh_reg(61 downto 0) & "00";
 
 end architecture;
