@@ -6,23 +6,22 @@ use ieee.std_logic_1164.all
 use ieee.std_logic_unsigned.all;
 
 entity primer is
-	port
-		(
+	port (
 		iA : in std_logic;
 		iB : in std_logic;
 		iSEL : in std_logic_vector(1 downto 0);
 		oY : out std_logic_vector(3 downto 0)
-		);
+	);
 end primer;
 
 architecture behavioral of primer is
 	-- Konstante
-	constant mod10 : std_logic_vector(3 downto 0) := "0101";	-- 9 (valjda)
+	constant mod10 : std_logic_vector(3 downto 0) := "1001";	-- 9
 
 	-- Signali
-	signal sMUX : std_logic_vector(3 downto 0);
-	signal sDEC : std_logic_vector(3 downto 0);
-	signal sCNT : std_logic_vector(3 downto 0);
+	signal sMUX  : std_logic_vector(3 downto 0);
+	signal sDEC  : std_logic_vector(3 downto 0);
+	signal sCNT  : std_logic_vector(3 downto 0);
 	signal sCASE : std_logic_vector(1 downto 0);
 
 begin
@@ -32,7 +31,7 @@ begin
 	-- Sabirač
 	sADD <= sB + sC;
 
-	-- Komplementer
+	-- Komplementer (negacija + 1)
 	sCOMP <= not(sADD) + 1;
 
 	-- aAritmetičko udesno za 2
@@ -80,8 +79,8 @@ begin
 	
 	-- Multiplekser 2x4
 	sMUX <=
-		sCNT when iSEL = "00" else
-		sDEC when iSEL = "01" else
+		sCNT  when iSEL = "00" else
+		sDEC  when iSEL = "01" else
 		sCASE when iSEL = "10" else
 		sDEF;
 
@@ -90,9 +89,9 @@ begin
 
 	-- if-else proces
 	process (iY) begin
-		if(iY = "001") then
+		if (iY = "001") then
 			sCNT = "1001";
-		elsif(iY = "010") then
+		elsif (iY = "010") then
 			sCNT = "0110";
 		else
 			sCNT = "0000";
@@ -118,10 +117,10 @@ begin
 
 	-- Brojač, asinhroni reset, rastuća ivica
 	process (iRST, iCLK) begin
-		if(iRST = '1') then
+		if (iRST = '1') then
 			sCA <= "0000";
-		elsif(iCLK'event and iCLK = '1') then
-			if(iEN = '1') then
+		elsif (iCLK'event and iCLK = '1') then
+			if (iEN = '1') then
 				sCA <= sCA + 1;
 			end if;
 		end if;
@@ -129,7 +128,7 @@ begin
 
 	-- Brojač, sinhroni reset, opadajuća ivica
 	process (iCLK) begin
-		if(falling_edge(iCLK)) then
+		if (falling_edge(iCLK)) then
 			if (iRST = '1') then
 				sCS <= "0000";
 			elsif (iEN = '1') then
@@ -142,10 +141,10 @@ begin
 	process (iRST, iCLK) begin
 		if (iRST = '1') then
 			sSHREG = "0000";
-		elsif(rising_edge(iCLK)) then
+		elsif (rising_edge(iCLK)) then
 			if (iLOAD = '1') then
 				sSHREG <= iDATA;
-			elsif(iSHR = '1' and iSHL = '0') then
+			elsif (iSHR = '1' and iSHL = '0') then
 				sSHREG <= sSHREG(3) & sSHREG(3 downto 1);
 			else
 				sSHREG <= sSHREG(2 downto 0) & '0';
