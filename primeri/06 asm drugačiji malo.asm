@@ -1,18 +1,19 @@
 /*
-	// .data
+.data
 	short* p_result		= 0x1A;
 	short* p_done		= 0x20;
 	short N = 5;
 	short a[5] = {-1, -2, -3, -4,  6};
 */
+
 .data
-0x1A
-0x20
-5
--1, -2, -3, -4, 6
+	0x1A
+	0x20
+	5
+	-1, -2, -3, -4, 6
 
 /*
-	// .text
+.text
 	short res = 0;
 	short pow = 0;
 	
@@ -42,64 +43,64 @@
 	R7 - tmp
 */
 begin:
-ld  R4, R3		// p_result -> R4
-inc R3, R3
-ld  R5, R3		// p_done -> R5
-inc R3, R3
-ld  R2, R3		// N -> R2
-inc R3, R3		// a[i] -> R3
+	ld  R4, R3		// p_result -> R4
+	inc R3, R3
+	ld  R5, R3		// p_done -> R5
+	inc R3, R3
+	ld  R2, R3		// N -> R2
+	inc R3, R3		// a[i] -> R3
 
 
 pow_prep:
-inc R1, R1		// R1 = 1 -> sad šift ulevo
-mov R6, R2		// temp za N -> R6
-inc R6, R6		// štimanje da valja
+	inc R1, R1		// R1 = 1 -> sad šift ulevo
+	mov R6, R2		// temp za N -> R6
+	inc R6, R6		// štimanje da valja
 
 pow_check:
-dec R6, R6
-jmpz for_prep
+	dec R6, R6
+	jmpz for_prep
 
 pow_shl:
-shl R1, R1
-jmp pow_check
+	shl R1, R1
+	jmp pow_check
 
 
 
 for_prep:
-sub R7, R7, R7	// i = 0
-sub R6, R6, R6	// za proveru kraja, za očitavanje a[i]
+	sub R7, R7, R7		// i = 0
+	sub R6, R6, R6		// za proveru kraja, za očitavanje a[i]
 
 for_check:
-sub R6, R7, R2
-jmpz zbir
+	sub R6, R7, R2
+	jmpz zbir
 
 for_deref:
-ld R6, R3
+	ld R6, R3
 
 for_add:
-add R0, R0, R6
+	add R0, R0, R6
 
 for_inc:
-inc R7, R7
-inc R3, R3
-jmp for_check
+	inc R7, R7
+	inc R3, R3
+	jmp for_check
 
 
 zbir:
-add R0, R0, R1
+	add R0, R0, R1
 
 deljenje:
-ashr R0, R0
-ashr R0, R0
+	ashr R0, R0
+	ashr R0, R0
 
 
 jedinica:
-sub R7, R7, R7
-inc R7, R7
+	sub R7, R7, R7
+	inc R7, R7
 
 cuvanje:
-st R0, R4
-st R7, R5
+	st R0, R4
+	st R7, R5
 	
 end:
-jmp end
+	jmp end
