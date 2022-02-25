@@ -6,10 +6,10 @@ use ieee.std_logic_1164.all;
 -- ENTITY --
 entity svega is
 	port(
-		iA 		:  in std_logic_vector(7 downto 0);
-		iB 		:  in std_logic_vector(2 downto 0);
+		iA 	:  in std_logic_vector(7 downto 0);
+		iB 	:  in std_logic_vector(2 downto 0);
 		iSEL 	:  in std_logic_vector(1 downto 0);
-		oY 		: out std_logic_vector(3 downto 0);
+		oY 	: out std_logic_vector(3 downto 0);
 		oZERO 	: out std_logic
 	);
 end entity;
@@ -18,17 +18,16 @@ end entity;
 
 -- ARHITEKTURA --
 architecture Behavioral of svega is
-	-- navedi sve signale (vektori)
-	signal sCODER	: std_logic_vector(2 downto 0);			-- 3 bit
-	signal sADD		: std_logic_vector(3 downto 0);			-- 4 bit
-	signal sB		: std_logic_vector(3 downto 0);
-	signal sC		: std_logic_vector(3 downto 0);
-	signal sCOMP	: std_logic_vector(3 downto 0);
-	signal sSHIFT	: std_logic_vector(3 downto 0);
-	signal sDEC		: std_logic_vector(7 downto 0);			-- 8 bit
+	signal sCODER	 : std_logic_vector(2 downto 0);	-- 3 bit
+	signal sADD	 : std_logic_vector(3 downto 0);	-- 4 bit
+	signal sB	 : std_logic_vector(3 downto 0);
+	signal sC	 : std_logic_vector(3 downto 0);
+	signal sCOMP	 : std_logic_vector(3 downto 0);
+	signal sSHIFT	 : std_logic_vector(3 downto 0);
+	signal sDEC	 : std_logic_vector(7 downto 0);	-- 8 bit
 	signal sDEC_HIGH : std_logic_vector(3 downto 0);
-	signal sDEC_LOW : std_logic_vector(3 downto 0);
-	signal sMUX		: std_logic_vector(3 downto 0);
+	signal sDEC_LOW  : std_logic_vector(3 downto 0);
+	signal sMUX	 : std_logic_vector(3 downto 0);
 	
 begin
 
@@ -92,7 +91,7 @@ sCODER <=
 	oLT <= '1' when A<B else '0';
 
 -- SABIRAČ --
-	sB   <= iB(2) & iB;				-- Proširi za bit znaka
+	sB   <= iB(2) & iB;			-- Proširi za bit znaka
 	sC   <= sCODER(2) & sCODER;		-- Proširi za bit znaka
 	sADD <= sB + sC;
 
@@ -101,7 +100,7 @@ sCODER <=
 	sSHR <= "00" & sADD(3 downto 2); 
 
 -- ARITMETIČKI POMERAČ --
--- (dodatno kopira skroz levu vrednost) -> ovo je aritmetičko pomeranje za 2 udesno
+-- (dodatno kopira skroz levu vrednost)
 	sASHR <= sADD(3) & sADD(3) & sADD(3 downto 2);
 
 -- KOMPLEMENTER 2 --
@@ -113,6 +112,6 @@ sCODER <=
 
 -- KRAJ -> DODELA VREDNOSTI OUT SIGNALIMA
 	oY <= sMUX;	
-	oZERO <= '1' when sMUX = 0 else '0';		-- Za poređenje ide obična 0, bez ''
+	oZERO <= '1' when (sMUX = 0) else '0';
 
 end architecture;
